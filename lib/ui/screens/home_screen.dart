@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translator/bloc/translator_bloc.dart';
 import 'package:flutter_translator/util/responsive.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,40 +11,54 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool change = false;
+  bool langEs = false;
   bool translator = false;
   TextEditingController textController = TextEditingController(text: "");
+  final streamsBLoC = TranslatorBloc();
 
   @override
   Widget build(BuildContext context) {
     final Size _size = new Size(context);
-    Card result = Card(
-      margin: const EdgeInsets.all(15.0),
-      color: Colors.indigo,
-      child: Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(25.0),
-            width: _size.width(),
-            height: _size.height() * 0.2,
-            child: Text(
-              "${textController.text}",
-              style: TextStyle(color: Colors.white, fontSize: 20.0),
+    StreamBuilder<String> result = StreamBuilder<String>(
+      stream: streamsBLoC.streamTranslator,
+      initialData: "",
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null && snapshot.data != "") {
+          return Card(
+            margin: const EdgeInsets.all(15.0),
+            color: Colors.indigo,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(25.0),
+                  width: _size.width(),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: _size.height() * 0.15,
+                    ),
+                    child: Text(
+                      "${snapshot.data}",
+                      style: TextStyle(color: Colors.white, fontSize: 20.0),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.share,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {},
+                  ),
+                )
+              ],
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: IconButton(
-              icon: Icon(
-                Icons.share,
-                color: Colors.white,
-              ),
-              onPressed: () {},
-            ),
-          )
-        ],
-      ),
+          );
+        }
+        return CupertinoActivityIndicator();
+      },
     );
     FlatButton _changeLang = FlatButton(
       splashColor: Colors.grey[200],
@@ -56,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
       ),
       onPressed: () {
-        change = !change;
+        langEs = !langEs;
         setState(() {});
       },
     );
@@ -78,12 +93,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: CupertinoButton(
                       child: Text(
-                        change ? "Ingles" : "Español",
+                        langEs ? "Ingles" : "Español",
                         style: TextStyle(
                           color: Colors.grey[600],
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () => print(langEs ? "Ingles" : "Español"),
                     ),
                   ),
                   Container(
@@ -98,12 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: CupertinoButton(
                       child: Text(
-                        change ? "Español" : "Ingles",
+                        langEs ? "Español" : "Ingles",
                         style: TextStyle(
                           color: Colors.grey[600],
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () => print(langEs ? "Español" : "Ingles"),
                     ),
                   ),
                 ],
@@ -137,8 +152,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       splashColor: Colors.indigo,
                       icon: Icon(Icons.send),
                       onPressed: () {
+                        if (!translator) setState(() {});
                         translator = true;
-                        setState(() {});
+                        streamsBLoC.translator(textController.text, langEs);
                       },
                     ),
                   ),
