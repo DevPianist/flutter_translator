@@ -52,7 +52,8 @@ class ResultStream extends StatelessWidget {
             ),
           );
         }
-        return CupertinoActivityIndicator();
+        return Container();
+        // return CupertinoActivityIndicator();
       },
     );
   }

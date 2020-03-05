@@ -1,30 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_translator/bloc/translator_bloc.dart';
-import 'package:flutter_translator/ui/widgets/home/current_text.dart';
+import 'package:flutter_translator/blocs/translator_bloc.dart';
+import 'package:flutter_translator/ui/widgets/home/current_text_stream.dart';
 import 'package:flutter_translator/ui/widgets/home/result_card.dart';
 import 'package:flutter_translator/util/responsive.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key}) : super(key: key);
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool langEs = false;
-  bool translator = false;
-  TextEditingController textController;
-  final streamsBLoC = TranslatorBloc();
-  String translated = "";
-  String currentText = "";
-  bool loading = true;
+  bool change;
+  String fromLang;
+  String toLang;
+  String currentText;
+  final translatorBLoC = TranslatorBloc();
+  // TextEditingController textController;
+  Size _size;
+
+  @override
+  void initState() {
+    currentText = "";
+
+    // textController = new TextEditingController();
+    _size = new Size(context);
+    change = false;
+    fromLang = "es";
+    toLang = "en";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = new Size(context);
-    textController = new TextEditingController();
+    print("build");
+
     FlatButton _changeLang = FlatButton(
       splashColor: Colors.grey[200],
       color: Colors.indigo,
@@ -36,16 +46,24 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
       ),
       onPressed: () {
-        langEs = !langEs;
-        setState(() {});
+        String aux = fromLang;
+        fromLang = toLang;
+        toLang = aux;
+        translatorBLoC.fromLang(fromLang);
+        translatorBLoC.toLang(toLang);
       },
     );
     Container inputText = Container(
       padding: const EdgeInsets.all(25.0),
       child: TextField(
-        controller: textController,
+        textCapitalization: TextCapitalization.sentences,
+        // controller: textController,
         onChanged: (string) {
           currentText = string;
+          (string != "")
+              ? translatorBLoC.translator("Escribiendo...")
+              : translatorBLoC.translator("");
+          translatorBLoC.currentText(currentText);
         },
         autocorrect: false,
         style: TextStyle(fontSize: 16.0),
@@ -72,13 +90,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     Expanded(
                       child: CupertinoButton(
-                        child: Text(
-                          langEs ? "Ingles" : "Español",
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                          ),
+                        child: StreamBuilder<String>(
+                          stream: translatorBLoC.streamFromLang,
+                          initialData: "",
+                          builder: (context, snapshot) {
+                            return Text(
+                              (snapshot.data == "en") ? "Ingles" : "Español",
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                              ),
+                            );
+                          },
                         ),
-                        onPressed: () => print(langEs ? "Ingles" : "Español"),
+                        onPressed: () => print(change ? "Ingles" : "Español"),
                       ),
                     ),
                     Container(
@@ -92,13 +116,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Expanded(
                       child: CupertinoButton(
-                        child: Text(
-                          langEs ? "Español" : "Ingles",
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                          ),
+                        child: StreamBuilder<String>(
+                          stream: translatorBLoC.streamToLang,
+                          initialData: "",
+                          builder: (context, snapshot) {
+                            return Text(
+                              (snapshot.data == "es") ? "Español" : "Inglés",
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                              ),
+                            );
+                          },
                         ),
-                        onPressed: () => print(langEs ? "Español" : "Ingles"),
+                        onPressed: () => print(change ? "Ingles" : "Español"),
                       ),
                     ),
                   ],
@@ -121,12 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: Icon(Icons.send),
                         onPressed: () {
                           FocusScope.of(context).requestFocus(FocusNode());
-                          if (!translator) {
-                            setState(() {});
-                            translator = true;
-                          }
-                          if (currentText != "")
-                            streamsBLoC.translator(currentText, langEs);
+                          translatorBLoC.translator(currentText);
                         },
                       ),
                     ),
@@ -136,12 +161,9 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: _size.height() * 0.01,
               ),
-              (translator && currentText != "")
-                  ? CurrentText(text: currentText)
-                  : Container(),
-              (translator && currentText != "")
-                  ? ResultStream(stream: streamsBLoC.streamTranslator)
-                  : Container(),
+              // CurrentTextStream(
+              //     text: currentText, stream: translatorBLoC.streamCurrentText),
+              ResultStream(stream: translatorBLoC.streamTranslator)
             ],
           ),
         ),
