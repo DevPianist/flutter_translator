@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_translator/util/responsive.dart';
+import '../../../util/responsive.dart';
 import 'package:share/share.dart';
 
 class ResultStream extends StatelessWidget {
@@ -10,13 +10,12 @@ class ResultStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = new Size(context);
+    final Responsive _size = new Responsive(context);
     return StreamBuilder<String>(
       stream: stream,
       initialData: "",
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data != null && snapshot.data != "") {
-          // translated = snapshot.data;
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 15.0),
             color: Colors.indigo,
@@ -31,7 +30,11 @@ class ResultStream extends StatelessWidget {
                     ),
                     child: Text(
                       "${snapshot.data}",
-                      style: TextStyle(color: Colors.white, fontSize: 20.0),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                      ),
+                      textAlign: TextAlign.justify,
                     ),
                   ),
                 ),
@@ -53,7 +56,6 @@ class ResultStream extends StatelessWidget {
           );
         }
         return Container();
-        // return CupertinoActivityIndicator();
       },
     );
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Size {
+class Responsive {
   final BuildContext context;
 
-  Size(this.context);
+  Responsive(this.context);
   double width() {
     return MediaQuery.of(context).size.width;
   }

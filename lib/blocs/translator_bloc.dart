@@ -19,22 +19,23 @@ class TranslatorBloc {
   final _controllerToLang = StreamController<String>();
   Stream<String> get streamToLang => _controllerToLang.stream;
 
-  final _controllerCurrentText = StreamController<String>();
-  Stream<String> get streamCurrentText => _controllerCurrentText.stream;
-
   void translator(String text) async {
     if (text == "Escribiendo...") {
       _controllerText.add(text);
-    } else if (text == "" || text.isEmpty) {
+    } else if (text == "" || text.isEmpty || text.length == 0) {
+      print("aea" + text);
+      print("no tiene nada");
       _controllerText.add("");
     } else {
-      print(text);
-      _controllerText.add("Traduciendo...");
-      print("lang: $_fromLang-$_toLang");
       final translator = GoogleTranslator();
-      _google =
-          await translator.translate(text, from: '$_fromLang', to: '$_toLang');
-      _controllerText.add(_google);
+      if (text != null) {
+        _google = await translator.translate(text,
+            from: '$_fromLang', to: '$_toLang');
+        if (_google != null) {
+          print("$_google");
+          _controllerText.add(_google);
+        }
+      }
     }
   }
 
@@ -46,9 +47,5 @@ class TranslatorBloc {
   void toLang(String toLang) {
     _toLang = toLang;
     _controllerToLang.add(toLang);
-  }
-
-  void currentText(String currentText) {
-    _controllerCurrentText.add(currentText);
   }
 }

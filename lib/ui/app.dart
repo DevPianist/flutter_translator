@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './screens/home/home_screen.dart';
+import './screens/principal_screen.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -9,9 +9,10 @@ class MyApp extends StatelessWidget {
       title: 'Traductor flutter',
       theme: ThemeData(
         primarySwatch: Colors.indigo,
+        primaryColor: Colors.indigo,
       ),
       routes: {
-        '/': (context) => HomeScreen(),
+        '/': (context) => PrincipalScreen(),
       },
     );
   }
