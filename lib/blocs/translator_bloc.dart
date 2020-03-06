@@ -23,8 +23,6 @@ class TranslatorBloc {
     if (text == "Escribiendo...") {
       _controllerText.add(text);
     } else if (text == "" || text.isEmpty || text.length == 0) {
-      print("aea" + text);
-      print("no tiene nada");
       _controllerText.add("");
     } else {
       final translator = GoogleTranslator();

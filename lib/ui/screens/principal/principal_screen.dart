@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../ui/screens/history/history_screen.dart';
-import '../../ui/screens/home/home_screen.dart';
+import '../home/home_screen.dart';
+import '../history/history_screen.dart';
+import '../about/about_screen.dart';
 
 class PrincipalScreen extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     HistoryScreen(),
-    Center(child: Text('Info')),
+    AboutScreen(),
   ];
   final _bottomNavigationBarItems = const <BottomNavigationBarItem>[
     BottomNavigationBarItem(
@@ -25,7 +26,7 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.info),
-      title: Text('Info'),
+      title: Text('Acerca de'),
     ),
   ];
 

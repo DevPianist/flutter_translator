@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_transform/stream_transform.dart';
 import '../../../blocs/translator_bloc.dart';
-import '../../../ui/widgets/home/result_card.dart';
+import '../../widgets/home/result_card.dart';
 import '../../../util/responsive.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,8 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("build");
-
     FlatButton _changeLang = FlatButton(
       splashColor: Colors.grey[200],
       color: Colors.indigo,
@@ -71,15 +69,14 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
     Container inputText = Container(
+      height: _size.height() * 0.16,
       padding: const EdgeInsets.all(25.0),
       child: TextField(
         textAlign: TextAlign.justify,
         minLines: 1,
-        maxLines: 6,
+        maxLines: 7,
         textCapitalization: TextCapitalization.sentences,
         onChanged: (string) {
-          print(string);
-          print(string.length.toString());
           if (string.length == 1) {
             translating = false;
             translatorBLoC.translator("Escribiendo...");
@@ -94,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         autocorrect: false,
         style: TextStyle(fontSize: 16.0),
-        maxLength: 200,
+        maxLength: 300,
         decoration: InputDecoration.collapsed(hintText: "Ingresa una palabra"),
       ),
     );

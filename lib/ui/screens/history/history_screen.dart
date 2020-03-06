@@ -28,12 +28,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ),
             child: ListTile(
               title: Text(
-                "El Lorem Ipsum fue concebido como un textde relleno, formateado de una cierta manera para permitir la presentación de elementos gráficos en documentos, sin necesidad de una copia formal. El uso de  mi",
+                "Hola hermano",
                 style: _styleTitle,
                 textAlign: TextAlign.justify,
               ),
               subtitle: Text(
-                "Lorem Ipsum was conceived as a filler textde, formatted in a certain manner to allow presentation of graphic elements in documents without a formal copy. Using my",
+                "Hi brother",
                 textAlign: TextAlign.justify,
               ),
             ),

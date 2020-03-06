@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './screens/principal_screen.dart';
+import './screens/splash/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.indigo,
       ),
       routes: {
-        '/': (context) => PrincipalScreen(),
+        '/': (context) => SplashScreen(),
       },
     );
   }
