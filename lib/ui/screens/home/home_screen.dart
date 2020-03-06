@@ -60,6 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
               : translatorBLoC.translator("");
           translatorBLoC.currentText(currentText);
         },
+        onSubmitted: (string) {
+          translatorBLoC.translator(currentText);
+        },
         autocorrect: false,
         style: TextStyle(fontSize: 16.0),
         maxLength: 200,
