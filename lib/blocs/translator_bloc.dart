@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:flutter_translator/util/token.dart';
-import 'package:translate/translate.dart';
 import 'package:translator/translator.dart';
 
 class TranslatorBloc {
@@ -36,16 +34,7 @@ class TranslatorBloc {
       final translator = GoogleTranslator();
       _google =
           await translator.translate(text, from: '$_fromLang', to: '$_toLang');
-      // Map<String, String> data = await TranslateIt("${Token.tokenTranslator}")
-      //     .translate(text ?? ".", "$_fromLang-$_toLang");
       _controllerText.add(_google);
-      // if (data.isNotEmpty) {
-      //   _controllerText.add(data["text"]);
-      //   print("bloc: ${data["text"]}");
-      // } else {
-      //   print("bloc: Empty");
-      //   _controllerText.add("");
-      // }
     }
   }
 

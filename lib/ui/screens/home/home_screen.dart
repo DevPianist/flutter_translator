@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translator/blocs/translator_bloc.dart';
-import 'package:flutter_translator/ui/widgets/home/current_text_stream.dart';
 import 'package:flutter_translator/ui/widgets/home/result_card.dart';
 import 'package:flutter_translator/util/responsive.dart';
 
@@ -16,14 +15,11 @@ class _HomeScreenState extends State<HomeScreen> {
   String toLang;
   String currentText;
   final translatorBLoC = TranslatorBloc();
-  // TextEditingController textController;
   Size _size;
 
   @override
   void initState() {
     currentText = "";
-
-    // textController = new TextEditingController();
     _size = new Size(context);
     change = false;
     fromLang = "es";
@@ -57,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.all(25.0),
       child: TextField(
         textCapitalization: TextCapitalization.sentences,
-        // controller: textController,
         onChanged: (string) {
           currentText = string;
           (string != "")
@@ -161,8 +156,6 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: _size.height() * 0.01,
               ),
-              // CurrentTextStream(
-              //     text: currentText, stream: translatorBLoC.streamCurrentText),
               ResultStream(stream: translatorBLoC.streamTranslator)
             ],
           ),
